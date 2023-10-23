@@ -17,22 +17,25 @@
   }
 }
 
+::selection {
+  color: white;
+  background-color: #56AB78; 
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
   font-family: 'Nunito', sans-serif;
 }
 
-/* select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: transparent;
-  background-image: url("/arrow-down.svg");
-  background-repeat: no-repeat;
-  background-position-x: calc(100% - 5px);
-  background-position-y: 10px;
-  background-size: 20px;
-} */
+.form-control {
+  @apply p-2 rounded-lg border border-main focus:outline-none text-main
+}
 
+.btn-main {
+  @apply py-2 px-4 rounded-xl border border-main bg-main text-white hover:bg-transparent hover:text-main
+}
 
-
+.btn-main-inverse {
+  @apply py-2 px-4 rounded-xl border border-main bg-transparent text-main hover:bg-main hover:text-white
+}
