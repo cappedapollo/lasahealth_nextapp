@@ -2,13 +2,59 @@
 
 import Link from "next/link";
 import { getPatientList } from "@/app/data/patients";
-import { getProfile } from "@/app/data/profile";
-import moment from "moment/moment";
+import moment from "moment";
+import ThSort from "@/app/components/ThSort";
+import { useMemo, useState } from "react";
 
 export default function Home() {
   const patients = getPatientList();
 
   const newestPatients = patients.filter((item) => item.new);
+
+  const [sorter, setSorter] = useState({ field: "name", direction: 1 });
+
+  const sortedNewPatientList = useMemo(() => {
+    let result = newestPatients;
+    if (sorter) {
+      if (sorter.field === "name") {
+        result = result.sort((a, b) => {
+          const firstCharA = a["name"].charAt(0).toLowerCase();
+          const firstCharB = b["name"].charAt(0).toLowerCase();
+
+          if (firstCharA < firstCharB) {
+            return sorter.direction ? 1 : -1;
+          }
+          if (firstCharA > firstCharB) {
+            return sorter.direction ? -1 : 1;
+          }
+          return 0;
+        });
+      }
+      if (sorter.field === "signupDate" || sorter.field === "appointmentDate") {
+        result = result.sort((a, b) => {
+          const tsA = moment(a["signupDate"]).valueOf();
+          const tsB = moment(b["signupDate"]).valueOf();
+
+          if (tsA < tsB) {
+            return sorter.direction ? 1 : -1;
+          }
+          if (tsA > tsB) {
+            return sorter.direction ? -1 : 1;
+          }
+          return 0;
+        });
+      }
+    }
+    return result;
+  }, [sorter, newestPatients]);
+
+  const onClickHeader = (field) => {
+    if (sorter.field === field) {
+      setSorter((draft) => ({ ...draft, direction: !draft.direction }));
+    } else {
+      setSorter(() => ({ field, direction: 1 }));
+    }
+  };
 
   const appointmentToday = patients.filter((item) => {
     return (
@@ -27,9 +73,8 @@ export default function Home() {
     );
   }).length;
 
-  const userInfo = getProfile();
   return (
-    <div className="px-6 pt-12 lg:px-8">
+    <div className="px-6 pt-12 lg:px-8 text-black">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="basis-2/3 bg-green30 rounded-2xl py-10 px-10">
           <h1 className="font-semibold text-2xl mb-5">Overflow</h1>
@@ -69,23 +114,40 @@ export default function Home() {
         <table className="w-full text-left">
           <thead className="w-full">
             <tr>
-              <th className="p-2">Name</th>
-              <th className="p-2">Signup Date</th>
-              <th className="p-2">Appointment Date</th>
+              <th className="p-2">
+                <ThSort
+                  sorter={sorter}
+                  field={"name"}
+                  label={"Name"}
+                  onClick={onClickHeader}
+                />
+              </th>
+              <th className="p-2">
+                <ThSort
+                  sorter={sorter}
+                  field={"signupDate"}
+                  label={"Signup Date"}
+                  onClick={onClickHeader}
+                />
+              </th>
+              <th className="p-2">
+                <ThSort
+                  sorter={sorter}
+                  field={"appointmentDate"}
+                  label={"Appointment Date"}
+                  onClick={onClickHeader}
+                />
+              </th>
               <th className="p-2">Health Profile Flags</th>
             </tr>
           </thead>
           <tbody className="w-full">
-            {newestPatients.map((item) => {
+            {sortedNewPatientList.map((item) => {
               return (
                 <tr key={item.id}>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2">
-                    {item.signupDate || "10/18/23 5:45pm"}
-                  </td>
-                  <td className="p-2">
-                    {item.appointmentDate || "10/18/23 5:45pm"}
-                  </td>
+                  <td className="p-2">{item.signupDate}</td>
+                  <td className="p-2">{item.appointmentDate}</td>
                   <td className="p-2">
                     <div className="flex gap-3 items-center">
                       <Link href="#" className="flex-1 text-orange">

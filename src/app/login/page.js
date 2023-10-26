@@ -26,7 +26,7 @@ export default function Login() {
     else window.alert("Username or password is invalid.");
   };
   return (
-    <div>
+    <div className="text-black">
       <header className="absolute bg-main inset-x-0 top-0 z-50">
         <nav
           className="flex items-center justify-between p-6 lg:px-8"

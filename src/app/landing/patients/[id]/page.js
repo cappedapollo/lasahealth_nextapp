@@ -56,7 +56,7 @@ export default function PatientProfile({ params }) {
 
   const renderAccordionContent = () => {
     return (
-      <div>
+      <div className="text-black">
         <div className="flex flex-col md:flex-row gap-2 md:gap-8">
           <div className="flex-1">
             <div className="flex gap-3 items-center">

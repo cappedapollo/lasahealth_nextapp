@@ -26,7 +26,7 @@ export default function PatientCreateModal({
     <Transition.Root show={visible} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative z-10 text-black"
         initialFocus={cancelButtonRef}
         onClose={() => setVisible(false)}
       >

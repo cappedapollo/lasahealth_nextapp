@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { getPatientList } from "@/app/data/patients";
 import moment from "moment";
-import { useMemo } from "react";
 
 export default function Agenda() {
   const agenda = getPatientList()
@@ -62,7 +61,7 @@ export default function Agenda() {
     ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date(date).getDay()];
 
   return (
-    <div className="pt-12">
+    <div className="pt-12 text-black">
       <h1 className="font-semibold text-2xl m-12 px-6 lg:px-8">Agenda</h1>
 
       <div className="mt-12">

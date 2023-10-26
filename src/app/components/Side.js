@@ -8,7 +8,7 @@ export default function Side({
   ...props
 }) {
   return (
-    <aside className={`bg-yellow p-8 pt-12 hidden lg:block`}>
+    <aside className={`bg-yellow p-8 pt-12 hidden lg:block text-black`}>
       <div className="my-8">
         <Link href="/">
           <Image
