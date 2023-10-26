@@ -1,62 +1,46 @@
-const data = [
-  {
-    id: 1,
-    date: "2022/07/18",
-    content: [
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-    ],
-  },
-  {
-    id: 2,
-    date: "2022/07/17",
-    content: [
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-    ],
-  },
-  {
-    id: 3,
-    date: "2022/07/15",
-    content: [
-      {
-        hour: "9 - 9:15am",
-        name: "Jackson",
-      },
-    ],
-  },
-];
+"use client";
+
+import Link from "next/link";
+import { getPatientList } from "@/app/data/patients";
+import moment from "moment";
+import { useMemo } from "react";
 
 export default function Agenda() {
-  const renderDate = (date) => new Date(date).getDate();
+  const agenda = getPatientList()
+    .filter((patient) =>
+      moment(patient.appointmentDate).isAfter(moment().startOf("day"))
+    )
+    .sort(
+      (a, b) =>
+        moment(a.appointmentDate).startOf("day").valueOf() -
+        moment(b.appointmentDate).startOf("day").valueOf()
+    )
+    .reduce((res, item) => {
+      const ts = moment(item.appointmentDate).startOf("day").valueOf();
+      const hour =
+        moment(item.appointmentDate).format("hh:mm a") +
+        " - " +
+        moment(item.appointmentDate).add(45, "minutes").format("hh:mm a");
+      res[ts] = res[ts]
+        ? [
+            ...res[ts],
+            {
+              hour: hour,
+              patientId: item.id,
+            },
+          ]
+        : [
+            {
+              hour: hour,
+              patientId: item.id,
+            },
+          ];
+      return res;
+    }, {});
+
+  const renderDate = (date) => {
+    return new Date(date).getDate();
+  };
 
   const renderMonth = (date) =>
     [
@@ -84,32 +68,47 @@ export default function Agenda() {
       <div className="mt-12">
         <table className="w-full text-center">
           <tbody className="w-full">
-            {data.map((item) => {
+            {Object.keys(agenda).map((date) => {
               return (
-                <tr key={item.id} className="border-t border-gray">
+                <tr key={date} className="border-t border-gray">
                   <td className="p-2 align-baseline">
-                    <div className="flex gap-3 justify-center items-center">
-                      <p className="bg-main text-white rounded-full w-10 h-10 leading-10">
-                        {renderDate(item.date)}
+                    <div className="flex mx-8 gap-3 items-center">
+                      <p
+                        className={`${
+                          Number(date) === moment().startOf("day").valueOf()
+                            ? "bg-main text-white"
+                            : ""
+                        } rounded-full w-10 leading-10 float-right`}
+                      >
+                        {renderDate(Number(date))}
                       </p>
-                      <p className="text-main">
-                        {renderMonth(item.date)}
+                      <p className="text-main text-left">
+                        {renderMonth(Number(date))}
                         {", "}
-                        {renderDay(item.date)}
+                        {renderDay(Number(date))}
                       </p>
                     </div>
                   </td>
                   <td className="p-2 align-baseline">
-                    {item.content.map((c, i) => {
+                    {agenda[date].map((c, i) => {
                       return (
                         <div className="flex gap-3 items-center py-2" key={i}>
                           <p className="flex-1 flex items-center relative before:absolute before:left-0 before:w-3 before:h-3 before:content-[''] before:bg-main before:rounded-full">
                             <span className="ml-12"> {c.hour}</span>
                           </p>
-                          <p className="flex-1">{c.name}</p>
-                          <button className="h-10 ml-4 bg-transparent border border-main text-main rounded-xl py-1 px-4 hover:bg-main hover:text-white">
+                          <p className="flex-1">
+                            {
+                              getPatientList().find(
+                                ({ id }) => id == c.patientId
+                              )["name"]
+                            }
+                          </p>
+                          <Link
+                            href={`/landing/patients/${c.patientId}`}
+                            className="btn-main-inverse ml-4"
+                          >
                             View Profile
-                          </button>
+                          </Link>
                           <div className="flex-1"></div>
                         </div>
                       );

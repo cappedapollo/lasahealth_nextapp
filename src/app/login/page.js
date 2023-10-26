@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { getProfile } from "../data/profile";
 
 const navigation = [
   { name: "Home", href: "/landing" },
@@ -14,8 +16,15 @@ const navigation = [
 ];
 
 export default function Login() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const onSubmit = () => {
+    console.log(password);
+    if (getProfile().username === username) router.push("/landing");
+    else window.alert("Username or password is invalid.");
+  };
   return (
     <div>
       <header className="absolute bg-main inset-x-0 top-0 z-50">
@@ -69,13 +78,13 @@ export default function Login() {
           onClose={setMobileMenuOpen}
         >
           <div className="fixed inset-0 z-50" />
-          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:shadow-lg sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <img
-                  src="/imgs/logo.png"
+                  src="/imgs/logo-green.png"
                   alt="Lasa Health Logo"
-                  className="invert "
+                  className=""
                   width={409 / 1.5}
                   height={96 / 1.5}
                 />
@@ -117,20 +126,22 @@ export default function Login() {
       </header>
 
       <div className="relative isolate px-6 pt-14 lg:px-8 h-screen flex items-center">
-        <div className="w-96 bg-secondary m-auto px-8 py-16 shadow-lg rounded-3xl -translate-y-12">
+        <div className="w-96 bg-gray-100 m-auto px-8 py-16 shadow-lg rounded-3xl -translate-y-12">
           <h1 className="text-center text-3xl mb-5">Login</h1>
           <div className="mb-3">
             <label className="block mb-2">Username</label>
             <input
-              className="w-full h-10 rounded-xl border-2 px-2 focus:outline-none"
+              className="form-control w-full"
               type="text"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="mb-3">
             <label className="block mb-2">Password</label>
             <input
-              className="w-full h-10 rounded-xl border-2 px-2 focus:outline-none"
+              className="form-control w-full"
               type="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="text-right mb-3">
@@ -139,7 +150,7 @@ export default function Login() {
             </Link>
           </div>
           <div className="text-center pt-3">
-            <button className="m-auto bg-main text-white rounded-xl px-12 py-2">
+            <button className="btn-main w-1/2" onClick={onSubmit}>
               Login
             </button>
           </div>

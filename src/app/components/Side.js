@@ -24,7 +24,7 @@ export default function Side({
         <div className="flex items-center leading-6 my-8 pl-4 py-4 bg-gradient-to-r from-yellow to-green30 rounded-xl">
           <span className="mr-2 bg-green30 rounded-full overflow-hidden">
             <Image
-              src={"/imgs/avatar.png"}
+              src={"/imgs/user.png"}
               alt={"Avatar"}
               width={60}
               height={60}
@@ -32,9 +32,7 @@ export default function Side({
           </span>
           <div>
             <h2 className="font-semibold text-sm leading-6">
-              <Link href="/landing/profile" className="hover:text-main">
-                Centerville Clinic
-              </Link>
+              Centerville Clinic
             </h2>
             <p className="text-sm">Dr. Anne</p>
           </div>
@@ -46,7 +44,7 @@ export default function Side({
             key={item.name}
             href={item.href}
             className={`flex items-center leading-6 my-2 pl-8 py-2 ${
-              pathname === item.href
+              pathname.startsWith(item.href)
                 ? "bg-main text-white rounded-2xl hover:text-white"
                 : "hover:text-main"
             }`}

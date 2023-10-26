@@ -9,5 +9,5 @@ export default function Home() {
   useLayoutEffect(() => {
     router.push("/landing");
   });
-  return <div className="text-main">Home</div>;
+  return "";
 }

@@ -4,13 +4,13 @@ import { usePathname } from "next/navigation";
 import Side from "../components/Side";
 
 const navigation = [
-  { name: "Patients", href: "/landing/patients", img: "/imgs/patient.png" },
-  { name: "Guidelines", href: "/f2/guidelines", img: "/imgs/home.png" },
-  { name: "Settings", href: "/landing/settings", img: "/imgs/setting.png" },
-  { name: "FAQs", href: "/landing/faqs", img: "/imgs/faq.png" },
+  { name: "My Profile", href: "#", img: "/imgs/user.png" },
+  { name: "Risk Assessment", href: "#", img: "/imgs/home.png" },
+  { name: "Settings", href: "#", img: "/imgs/setting.png" },
+  { name: "FAQs", href: "#", img: "/imgs/faq.png" },
 ];
 
-export default function F2Layout({ children }) {
+export default function Layout({ children }) {
   const pathname = usePathname();
 
   return (

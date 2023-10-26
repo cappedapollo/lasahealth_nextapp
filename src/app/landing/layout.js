@@ -4,11 +4,11 @@ import { usePathname } from "next/navigation";
 import Side from "../components/Side";
 
 const navigation = [
-  { name: "Home", href: "/landing", img: "/imgs/home.png" },
+  { name: "Home", href: "/landing/home", img: "/imgs/home.png" },
   { name: "Agenda", href: "/landing/agenda", img: "/imgs/agenda.png" },
-  { name: "Patients", href: "/landing/patients", img: "/imgs/patient.png" },
-  { name: "Settings", href: "/landing/settings", img: "/imgs/setting.png" },
-  { name: "FAQs", href: "/landing/faqs", img: "/imgs/faq.png" },
+  { name: "Patients", href: "/landing/patients", img: "/imgs/user.png" },
+  { name: "Settings", href: "#", img: "/imgs/setting.png" },
+  { name: "FAQs", href: "#", img: "/imgs/faq.png" },
 ];
 
 export default function LandingLayout({ children }) {
